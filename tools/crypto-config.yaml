@@ -3,7 +3,6 @@ OrdererOrgs:
     Domain: example.com
     EnableNodeOUs: true
     Specs:
-      - Hostname: orderer0
       - Hostname: orderer1
       - Hostname: orderer2
 

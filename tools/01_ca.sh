@@ -30,8 +30,8 @@ ln -s /root/02_meta/workspace/config.yaml .
 
 #初始参数
 orgs="org1_7044 org2_7045"
-peers="peer0 peer1"
-orders="orderer0 orderer1 orderer2"
+peers="peer0"
+orders="orderer1 orderer2"
 
 #注册 TLS CA 管理员，注册节点身份
 export FABRIC_CA_CLIENT_TLS_CERTFILES=/tmp/hyperledger/tls-ca/crypto/tls-ca-cert.pem
@@ -170,12 +170,8 @@ do
 done
 
 
-
-
-
-
 #整理MSP 
-orders="orderer0 orderer1 orderer2"
+orders="orderer1 orderer2"
 
 org=org0
 port=7043
@@ -223,7 +219,7 @@ mkdir -p crypto-config/ordererOrganizations/example.com
 
 mkdir -p crypto-config/peerOrganizations
 orgs="org1_7044 org2_7045"
-peers="peer0 peer1"
+peers="peer0"
 for org_port in $orgs
 do
     org=`echo ${org_port} | cut -f 1 -d _`
