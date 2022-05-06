@@ -1,4 +1,4 @@
-cd ~/02_meta/workspace
+cd ~/02_meta/NFT-BASE-FABRIC
 
 #重置数据库
 mysql -u root -h localhost -p -P 3306
@@ -21,15 +21,15 @@ docker stop $(docker ps -aq)
 docker rm $(docker ps -aq)
 # docker rmi -f $(docker images -q)
 rm /tmp/hyperledger/ -r
-docker-compose -f docker-compose-ca.yaml up -d
+docker-compose -f tools/docker-compose-ca.yaml up -d
 
 cd /tmp/hyperledger
-cp /root/02_meta/workspace/fabric-ca-client .
+# cp /root/02_meta/workspace/fabric-ca-client .
 ln -s /root/02_meta/workspace/see_crt.sh .
 ln -s /root/02_meta/workspace/config.yaml .
 
 #初始参数
-orgs="org1_7054 org2_7055"
+orgs="org1_7044 org2_7045"
 peers="peer0 peer1"
 orders="orderer0 orderer1 orderer2"
 
@@ -38,47 +38,47 @@ export FABRIC_CA_CLIENT_TLS_CERTFILES=/tmp/hyperledger/tls-ca/crypto/tls-ca-cert
 export FABRIC_CA_CLIENT_HOME=/tmp/hyperledger/tls-ca/admin
 export FABRIC_CA_CLIENT_MSPDIR=msp
 cp tls-ca/crypto/ca-cert.pem tls-ca/crypto/tls-ca-cert.pem
-./fabric-ca-client enroll -d -u https://tls-ca-admin:tls-ca-AdminPW@0.0.0.0:7052
+fabric-ca-client enroll -d -u https://tls-ca-admin:tls-ca-AdminPW@0.0.0.0:7042
 
 
 
 #order相关
 org=org0
-port=7053
+port=7043
 for order in $orders
 do
     #注册order
     export FABRIC_CA_CLIENT_TLS_CERTFILES=/tmp/hyperledger/tls-ca/crypto/tls-ca-cert.pem
     export FABRIC_CA_CLIENT_HOME=/tmp/hyperledger/tls-ca/admin
     export FABRIC_CA_CLIENT_MSPDIR=msp
-    ./fabric-ca-client register -d --id.name ${order}.example.com --id.secret ${order}PW --id.type orderer -u https://0.0.0.0:7052
+    fabric-ca-client register -d --id.name ${order}.example.com --id.secret ${order}PW --id.type orderer -u https://0.0.0.0:7042
     
     #登记order
     export FABRIC_CA_CLIENT_TLS_CERTFILES=/tmp/hyperledger/tls-ca/crypto/tls-ca-cert.pem
     export FABRIC_CA_CLIENT_HOME=/tmp/hyperledger/${org}/${order}
     export FABRIC_CA_CLIENT_MSPDIR=tls-msp
-    ./fabric-ca-client enroll -d -u https://${order}.example.com:${order}PW@0.0.0.0:7052 --enrollment.profile tls --csr.hosts ${order}.example.com
+    fabric-ca-client enroll -d -u https://${order}.example.com:${order}PW@0.0.0.0:7042 --enrollment.profile tls --csr.hosts ${order}.example.com
     # sk=`ls ${org}/${order}/tls-msp/keystore/ | grep -v key`     
     # mv ${org}/${order}/tls-msp/keystore/$sk ${org}/${order}/tls-msp/keystore/key.pem
 done
 
 org=org0
-port=7053
+port=7043
 export FABRIC_CA_CLIENT_TLS_CERTFILES=/tmp/hyperledger/${org}/ca/crypto/ca-cert.pem
 export FABRIC_CA_CLIENT_HOME=/tmp/hyperledger/${org}/ca/admin
 export FABRIC_CA_CLIENT_MSPDIR=msp
-./fabric-ca-client enroll -d -u https://rca-${org}-admin:rca-${org}-AdminPW@0.0.0.0:${port}
+fabric-ca-client enroll -d -u https://rca-${org}-admin:rca-${org}-AdminPW@0.0.0.0:${port}
 
 #注册admin
 export FABRIC_CA_CLIENT_TLS_CERTFILES=/tmp/hyperledger/${org}/ca/crypto/ca-cert.pem
 export FABRIC_CA_CLIENT_HOME=/tmp/hyperledger/${org}/ca/admin
 export FABRIC_CA_CLIENT_MSPDIR=msp
-./fabric-ca-client register -d --id.name admin-${org} --id.secret ${org}AdminPW --id.type admin --id.attrs "hf.Registrar.Roles=*,hf.Registrar.DelegateRoles=*,hf.AffiliationMgr=true,hf.Registrar.Attributes=*,hf.Revoker=true,hf.GenCRL=true,admin=true:ecert" -u https://0.0.0.0:${port}
+fabric-ca-client register -d --id.name admin-${org} --id.secret ${org}AdminPW --id.type admin --id.attrs "hf.Registrar.Roles=*,hf.Registrar.DelegateRoles=*,hf.AffiliationMgr=true,hf.Registrar.Attributes=*,hf.Revoker=true,hf.GenCRL=true,admin=true:ecert" -u https://0.0.0.0:${port}
 #登记admin
 export FABRIC_CA_CLIENT_TLS_CERTFILES=/tmp/hyperledger/${org}/ca/crypto/ca-cert.pem
 export FABRIC_CA_CLIENT_HOME=/tmp/hyperledger/${org}/admin
 export FABRIC_CA_CLIENT_MSPDIR=msp
-./fabric-ca-client enroll -d -u https://admin-${org}:${org}AdminPW@0.0.0.0:${port}
+fabric-ca-client enroll -d -u https://admin-${org}:${org}AdminPW@0.0.0.0:${port}
 
 #注册order
 for order in $orders
@@ -86,12 +86,12 @@ do
     export FABRIC_CA_CLIENT_TLS_CERTFILES=/tmp/hyperledger/${org}/ca/crypto/ca-cert.pem
     export FABRIC_CA_CLIENT_HOME=/tmp/hyperledger/${org}/ca/admin
     export FABRIC_CA_CLIENT_MSPDIR=msp
-    ./fabric-ca-client register -d --id.name ${order}.example.com --id.secret ${order}PW --id.type orderer -u https://0.0.0.0:${port}
+    fabric-ca-client register -d --id.name ${order}.example.com --id.secret ${order}PW --id.type orderer -u https://0.0.0.0:${port}
     
     export FABRIC_CA_CLIENT_TLS_CERTFILES=/tmp/hyperledger/${org}/ca/crypto/ca-cert.pem
     export FABRIC_CA_CLIENT_HOME=/tmp/hyperledger/${org}/${order}
     export FABRIC_CA_CLIENT_MSPDIR=msp
-    ./fabric-ca-client enroll -d -u https://${order}.example.com:${order}PW@0.0.0.0:${port}
+    fabric-ca-client enroll -d -u https://${order}.example.com:${order}PW@0.0.0.0:${port}
     # sk=`ls ${org}/admin/msp/keystore/ | grep -v priv` 
     # mv ${org}/admin/msp/keystore/$sk /tmp/hyperledger/org0/admin/msp/keystore/priv_sk
 
@@ -114,12 +114,12 @@ do
         export FABRIC_CA_CLIENT_TLS_CERTFILES=/tmp/hyperledger/tls-ca/crypto/tls-ca-cert.pem
         export FABRIC_CA_CLIENT_HOME=/tmp/hyperledger/tls-ca/admin
         export FABRIC_CA_CLIENT_MSPDIR=msp
-        ./fabric-ca-client register -d --id.name ${peer}.${org}.example.com --id.secret ${peer}PW --id.type peer -u https://0.0.0.0:7052
+        fabric-ca-client register -d --id.name ${peer}.${org}.example.com --id.secret ${peer}PW --id.type peer -u https://0.0.0.0:7042
     
         export FABRIC_CA_CLIENT_TLS_CERTFILES=/tmp/hyperledger/tls-ca/crypto/tls-ca-cert.pem
         export FABRIC_CA_CLIENT_HOME=/tmp/hyperledger/${org}/${peer}
         export FABRIC_CA_CLIENT_MSPDIR=tls-msp
-        ./fabric-ca-client enroll -d -u https://${peer}.${org}.example.com:${peer}PW@0.0.0.0:7052 --enrollment.profile tls --csr.hosts ${peer}.${org}.example.com
+        fabric-ca-client enroll -d -u https://${peer}.${org}.example.com:${peer}PW@0.0.0.0:7042 --enrollment.profile tls --csr.hosts ${peer}.${org}.example.com
         # sk=`ls ${org}/${peer}/tls-msp/keystore/ | grep -v key` 
         # mv ${org}/${peer}/tls-msp/keystore/$sk ${org}/${peer}/tls-msp/keystore/key.pem
     done
@@ -132,15 +132,15 @@ do
     export FABRIC_CA_CLIENT_TLS_CERTFILES=/tmp/hyperledger/${org}/ca/crypto/ca-cert.pem
     export FABRIC_CA_CLIENT_HOME=/tmp/hyperledger/${org}/ca/admin
     export FABRIC_CA_CLIENT_MSPDIR=msp
-    ./fabric-ca-client enroll -d -u https://rca-${org}-admin:rca-${org}-AdminPW@0.0.0.0:${port}
+    fabric-ca-client enroll -d -u https://rca-${org}-admin:rca-${org}-AdminPW@0.0.0.0:${port}
 
-    ./fabric-ca-client register -d --id.name admin-${org} --id.secret ${org}AdminPW --id.type admin --id.attrs "hf.Registrar.Roles=*,hf.Registrar.DelegateRoles=*,hf.AffiliationMgr=true,hf.Registrar.Attributes=*,hf.Revoker=true,hf.GenCRL=true,admin=true:ecert" -u https://0.0.0.0:${port}
-    # ./fabric-ca-client register -d --id.name user-${org} --id.secret ${org}UserPW --id.type user -u https://0.0.0.0:${port}
+    fabric-ca-client register -d --id.name admin-${org} --id.secret ${org}AdminPW --id.type admin --id.attrs "hf.Registrar.Roles=*,hf.Registrar.DelegateRoles=*,hf.AffiliationMgr=true,hf.Registrar.Attributes=*,hf.Revoker=true,hf.GenCRL=true,admin=true:ecert" -u https://0.0.0.0:${port}
+    # fabric-ca-client register -d --id.name user-${org} --id.secret ${org}UserPW --id.type user -u https://0.0.0.0:${port}
     
     export FABRIC_CA_CLIENT_TLS_CERTFILES=/tmp/hyperledger/${org}/ca/crypto/ca-cert.pem
     export FABRIC_CA_CLIENT_HOME=/tmp/hyperledger/${org}/admin
     export FABRIC_CA_CLIENT_MSPDIR=msp
-    ./fabric-ca-client enroll -d -u https://admin-${org}:${org}AdminPW@0.0.0.0:${port}
+    fabric-ca-client enroll -d -u https://admin-${org}:${org}AdminPW@0.0.0.0:${port}
     # sk=`ls  ${org}/admin/msp/keystore/ | grep -v priv` 
     # mv ${org}/admin/msp/keystore/$sk /tmp/hyperledger/${org}/admin/msp/keystore/priv_sk
 done
@@ -155,12 +155,12 @@ do
         export FABRIC_CA_CLIENT_TLS_CERTFILES=/tmp/hyperledger/${org}/ca/crypto/ca-cert.pem
         export FABRIC_CA_CLIENT_HOME=/tmp/hyperledger/${org}/ca/admin
         export FABRIC_CA_CLIENT_MSPDIR=msp
-        ./fabric-ca-client register -d --id.name ${peer}.${org}.example.com --id.secret ${peer}PW --id.type peer -u https://0.0.0.0:${port}
+        fabric-ca-client register -d --id.name ${peer}.${org}.example.com --id.secret ${peer}PW --id.type peer -u https://0.0.0.0:${port}
         
         export FABRIC_CA_CLIENT_TLS_CERTFILES=/tmp/hyperledger/${org}/ca/crypto/ca-cert.pem
         export FABRIC_CA_CLIENT_HOME=/tmp/hyperledger/${org}/${peer}
         export FABRIC_CA_CLIENT_MSPDIR=msp
-        ./fabric-ca-client enroll -d -u https://${peer}.${org}.example.com:${peer}PW@0.0.0.0:${port}
+        fabric-ca-client enroll -d -u https://${peer}.${org}.example.com:${peer}PW@0.0.0.0:${port}
         # sk=`ls ${org}/${peer}/msp/keystore/ | grep -v priv` 
         # mv ${org}/${peer}/msp/keystore/$sk ${org}/${peer}/msp/keystore/priv_sk
 
@@ -178,7 +178,7 @@ done
 orders="orderer0 orderer1 orderer2"
 
 org=org0
-port=7053
+port=7043
 mkdir -p crypto-config/ordererOrganizations/example.com
 
     # mkdir -p crypto-config/ordererOrganizations/example.com/ca
@@ -222,7 +222,7 @@ mkdir -p crypto-config/ordererOrganizations/example.com
     # mkdir -p crypto-config/ordererOrganizations/example.com/users
 
 mkdir -p crypto-config/peerOrganizations
-orgs="org1_7054 org2_7055"
+orgs="org1_7044 org2_7045"
 peers="peer0 peer1"
 for org_port in $orgs
 do
@@ -273,5 +273,5 @@ do
 
 done
 
-# cd ~/02_meta/workspace
+# cd ~/02_meta/NFT-BASE-FABRIC
 # docker-compose -f docker-compose-ca.yaml down -v

@@ -8,8 +8,8 @@ services:
 
   ca-tls:
     container_name: ca-tls
-    image: hyperledger/fabric-ca
-    command: sh -c 'fabric-ca-server start -d -b tls-ca-admin:tls-ca-AdminPW --port 7052'
+    image: hyperledger/fabric-ca:1.5.2
+    command: /bin/sh -c 'fabric-ca-server start -d -b tls-ca-admin:tls-ca-AdminPW --port 7042'
     environment:
       - FABRIC_CA_SERVER_HOME=/tmp/hyperledger/fabric-ca/crypto
       - FABRIC_CA_SERVER_TLS_ENABLED=true
@@ -23,12 +23,12 @@ services:
     networks:
       - fabric-ca
     ports:
-      - 7052:7052
+      - 7042:7042
 
   rca-org0:
     container_name: rca-org0
-    image: hyperledger/fabric-ca
-    command: /bin/bash -c 'fabric-ca-server start -d -b rca-org0-admin:rca-org0-AdminPW --port 7053'
+    image: hyperledger/fabric-ca:1.5.2
+    command: /bin/sh -c 'fabric-ca-server start -d -b rca-org0-admin:rca-org0-AdminPW --port 7043'
     environment:
       - FABRIC_CA_SERVER_HOME=/tmp/hyperledger/fabric-ca/crypto
       - FABRIC_CA_SERVER_TLS_ENABLED=true
@@ -42,12 +42,12 @@ services:
     networks:
       - fabric-ca
     ports:
-      - 7053:7053
+      - 7043:7043
 
   rca-org1:
     container_name: rca-org1
-    image: hyperledger/fabric-ca
-    command: /bin/bash -c 'fabric-ca-server start -d -b rca-org1-admin:rca-org1-AdminPW --port 7054'
+    image: hyperledger/fabric-ca:1.5.2
+    command: /bin/sh -c 'fabric-ca-server start -d -b rca-org1-admin:rca-org1-AdminPW --port 7044'
     environment:
       - FABRIC_CA_SERVER_HOME=/tmp/hyperledger/fabric-ca/crypto
       - FABRIC_CA_SERVER_TLS_ENABLED=true
@@ -61,12 +61,12 @@ services:
     networks:
       - fabric-ca
     ports:
-      - 7054:7054
+      - 7044:7044
 
   rca-org2:
     container_name: rca-org2
-    image: hyperledger/fabric-ca
-    command: /bin/bash -c 'fabric-ca-server start -d -b rca-org2-admin:rca-org2-AdminPW --port 7055'
+    image: hyperledger/fabric-ca:1.5.2
+    command: /bin/sh -c 'fabric-ca-server start -d -b rca-org2-admin:rca-org2-AdminPW --port 7045'
     environment:
       - FABRIC_CA_SERVER_HOME=/tmp/hyperledger/fabric-ca/crypto
       - FABRIC_CA_SERVER_TLS_ENABLED=true
@@ -80,4 +80,4 @@ services:
     networks:
       - fabric-ca
     ports:
-      - 7055:7055
+      - 7045:7045
