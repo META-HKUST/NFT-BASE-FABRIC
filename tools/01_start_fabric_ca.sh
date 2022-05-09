@@ -1,4 +1,5 @@
-cd ~/02_meta/NFT-BASE-FABRIC
+NFT_BASE_FABRIC=~/02_meta/NFT-BASE-FABRIC
+cd ${NFT_BASE_FABRIC}
 
 #重置数据库
 mysql -u root -h localhost -p -P 3306
@@ -24,9 +25,7 @@ rm /tmp/hyperledger/ -r
 docker-compose -f tools/docker-compose-ca.yaml up -d
 
 cd /tmp/hyperledger
-# cp /root/02_meta/workspace/fabric-ca-client .
-ln -s /root/02_meta/workspace/see_crt.sh .
-ln -s /root/02_meta/workspace/config.yaml .
+ln -s ${NFT_BASE_FABRIC}/config.yaml .
 
 #初始参数
 orgs="org1_7044 org2_7045"
@@ -39,7 +38,6 @@ export FABRIC_CA_CLIENT_HOME=/tmp/hyperledger/tls-ca/admin
 export FABRIC_CA_CLIENT_MSPDIR=msp
 cp tls-ca/crypto/ca-cert.pem tls-ca/crypto/tls-ca-cert.pem
 fabric-ca-client enroll -d -u https://tls-ca-admin:tls-ca-AdminPW@0.0.0.0:7042
-
 
 
 #order相关
@@ -265,9 +263,4 @@ do
                 mkdir -p crypto-config/peerOrganizations/${org}.example.com/users/Admin@${org}.example.com/msp/tlscacerts
                     cp ./tls-ca/crypto/tls-ca-cert.pem crypto-config/peerOrganizations/${org}.example.com/users/Admin@${org}.example.com/msp/tlscacerts/tlsca.${org}.example.com-cert.pem
                 cat config.yaml | sed "s/xxxxxxxx/cacerts\/0-0-0-0-${port}.pem/g" > crypto-config/peerOrganizations/${org}.example.com/users/Admin@${org}.example.com/msp/config.yaml
-
-
 done
-
-# cd ~/02_meta/NFT-BASE-FABRIC
-# docker-compose -f docker-compose-ca.yaml down -v
