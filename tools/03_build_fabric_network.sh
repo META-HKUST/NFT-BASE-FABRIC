@@ -4,6 +4,9 @@
 # 47.98.184.198 peer0.org1.example.com
 # 47.98.184.198 peer0.org2.example.com
 
+docker stop $(docker ps | grep -v ca | cut -f 1 -d " " | grep -v CON | xargs)
+docker rm $(docker ps -a | grep -v ca | cut -f 1 -d " " | grep -v CON | xargs)
+
 NFT_BASE_FABRIC=~/02_meta/NFT-BASE-FABRIC
 
 #org1

@@ -1,6 +1,3 @@
-NFT_BASE_FABRIC=~/02_meta/NFT-BASE-FABRIC
-cd ${NFT_BASE_FABRIC}
-
 #重置数据库
 mysql -u root -h localhost -p -P 3306
 SHOW DATABASES;
@@ -17,6 +14,9 @@ SHOW DATABASES;
 exit;
 service mysql restart
 
+
+NFT_BASE_FABRIC=~/02_meta/NFT-BASE-FABRIC
+cd ${NFT_BASE_FABRIC}
 #重置docker
 docker stop $(docker ps -aq)
 docker rm $(docker ps -aq)
@@ -25,7 +25,7 @@ rm /tmp/hyperledger/ -r
 docker-compose -f tools/docker-compose-ca.yaml up -d
 
 cd /tmp/hyperledger
-ln -s ${NFT_BASE_FABRIC}/config.yaml .
+ln -s ${NFT_BASE_FABRIC}/tools/config.yaml .
 
 #初始参数
 orgs="org1_7044 org2_7045"

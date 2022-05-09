@@ -2,9 +2,9 @@
 docker exec -it cli0.org1 bash
 
 peer chaincode invoke -o orderer1.example.com:7050 \
-    # --isInit  \
+    --isInit  \
     --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer1.example.com/msp/tlscacerts/tlsca.example.com-cert.pem \
-    -C mychannel -n mycc \
+    -C mychannel -n erc721cc \
     --peerAddresses peer0.org1.example.com:7051 \
     --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt \
     --peerAddresses peer0.org2.example.com:8051 \
@@ -20,7 +20,7 @@ export CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/pee
 
 peer chaincode invoke -o orderer1.example.com:7050 \
     --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer1.example.com/msp/tlscacerts/tlsca.example.com-cert.pem \
-    -C mychannel -n mycc \
+    -C mychannel -n erc721cc \
     --peerAddresses peer0.org1.example.com:7051 \
     --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt \
     --peerAddresses peer0.org2.example.com:8051 \

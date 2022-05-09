@@ -17,7 +17,7 @@ services:
       - FABRIC_CA_SERVER_CSR_HOSTS=0.0.0.0
       - FABRIC_CA_SERVER_DEBUG=true
       - FABRIC_CA_SERVER_DB_TYPE=mysql
-      - FABRIC_CA_SERVER_DB_DATASOURCE=root:xxxxxxx@tcp(47.98.184.198:3306)/fabric_ca_tls?parseTime=true
+      - FABRIC_CA_SERVER_DB_DATASOURCE=root:metaust@tcp(47.98.184.198:3306)/fabric_ca_tls?parseTime=true
     volumes:
       - /tmp/hyperledger/tls-ca:/tmp/hyperledger/fabric-ca
     networks:
@@ -36,7 +36,7 @@ services:
       - FABRIC_CA_SERVER_CSR_HOSTS=0.0.0.0
       - FABRIC_CA_SERVER_DEBUG=true
       - FABRIC_CA_SERVER_DB_TYPE=mysql
-      - FABRIC_CA_SERVER_DB_DATASOURCE=root:xxxxxxx@tcp(47.98.184.198:3306)/fabric_rca_org0?parseTime=true
+      - FABRIC_CA_SERVER_DB_DATASOURCE=root:metaust@tcp(47.98.184.198:3306)/fabric_rca_org0?parseTime=true
     volumes:
       - /tmp/hyperledger/org0/ca:/tmp/hyperledger/fabric-ca
     networks:
@@ -55,7 +55,7 @@ services:
       - FABRIC_CA_SERVER_CSR_HOSTS=0.0.0.0
       - FABRIC_CA_SERVER_DEBUG=true
       - FABRIC_CA_SERVER_DB_TYPE=mysql
-      - FABRIC_CA_SERVER_DB_DATASOURCE=root:xxxxxxx@tcp(47.98.184.198:3306)/fabric_rca_org1?parseTime=true
+      - FABRIC_CA_SERVER_DB_DATASOURCE=root:metaust@tcp(47.98.184.198:3306)/fabric_rca_org1?parseTime=true
     volumes:
       - /tmp/hyperledger/org1/ca:/tmp/hyperledger/fabric-ca
     networks:
@@ -74,7 +74,7 @@ services:
       - FABRIC_CA_SERVER_CSR_HOSTS=0.0.0.0
       - FABRIC_CA_SERVER_DEBUG=true
       - FABRIC_CA_SERVER_DB_TYPE=mysql
-      - FABRIC_CA_SERVER_DB_DATASOURCE=root:xxxxxxx@tcp(47.98.184.198:3306)/fabric_rca_org2?parseTime=true
+      - FABRIC_CA_SERVER_DB_DATASOURCE=root:metaust@tcp(47.98.184.198:3306)/fabric_rca_org2?parseTime=true
     volumes:
       - /tmp/hyperledger/org2/ca:/tmp/hyperledger/fabric-ca
     networks:
