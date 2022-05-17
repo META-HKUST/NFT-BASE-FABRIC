@@ -1,0 +1,45 @@
+version: '2.0'
+
+networks:
+  fabric-ca:
+    name: fabric-ca
+
+services:
+
+  tlsca-org2:
+    container_name: tlsca-org2
+    image: hyperledger/fabric-ca:1.5.2
+    command: /bin/sh -c 'fabric-ca-server start -d -b tlsca-org2-admin:tlsca-org2-AdminPW --port 11054'
+    environment:
+      - FABRIC_CA_SERVER_HOME=/tmp/hyperledger/fabric-ca/crypto
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_CSR_CN=tlsca-org2
+      - FABRIC_CA_SERVER_CSR_HOSTS=0.0.0.0
+      - FABRIC_CA_SERVER_DEBUG=true
+      - FABRIC_CA_SERVER_DB_TYPE=mysql
+      - FABRIC_CA_SERVER_DB_DATASOURCE=root:metaust@tcp(47.98.184.198:3306)/fabric_tlsca_org2?parseTime=true
+    volumes:
+      - /tmp/hyperledger/org2/tlsca:/tmp/hyperledger/fabric-ca
+    networks:
+      - fabric-ca
+    ports:
+      - 11055:11054
+      
+  ca-org2:
+    container_name: ca-org2
+    image: hyperledger/fabric-ca:1.5.2
+    command: /bin/sh -c 'fabric-ca-server start -d -b ca-org2-admin:ca-org2-AdminPW --port 11054'
+    environment:
+      - FABRIC_CA_SERVER_HOME=/tmp/hyperledger/fabric-ca/crypto
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_CSR_CN=ca-org2
+      - FABRIC_CA_SERVER_CSR_HOSTS=0.0.0.0
+      - FABRIC_CA_SERVER_DEBUG=true
+      - FABRIC_CA_SERVER_DB_TYPE=mysql
+      - FABRIC_CA_SERVER_DB_DATASOURCE=root:metaust@tcp(47.98.184.198:3306)/fabric_ca_org2?parseTime=true
+    volumes:
+      - /tmp/hyperledger/org2/ca:/tmp/hyperledger/fabric-ca
+    networks:
+      - fabric-ca
+    ports:
+      - 11056:11054
