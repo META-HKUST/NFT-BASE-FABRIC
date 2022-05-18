@@ -64,7 +64,7 @@ get_user_msp()
 
     mkdir -p ${user_msp}
         mkdir -p ${user_msp}/msp/
-            mkdir -p ${user_msp}/msp/admincerts; cp -r ${org}/ca/${user}/msp/signcerts/* ${user_msp}/msp/admincerts
+            mkdir -p ${user_msp}/msp/admincerts; cp -r ${org}/ca/admin/msp/signcerts/* ${user_msp}/msp/admincerts
             mkdir -p ${user_msp}/msp/cacerts; cp -r ${org}/ca/${user}/msp/cacerts/* ${user_msp}/msp/cacerts/ca.${org}.example.com-cert.pem
             mkdir -p ${user_msp}/msp/keystore; cp -r ${org}/ca/${user}/msp/keystore/* ${user_msp}/msp/keystore
             mkdir -p ${user_msp}/msp/signcerts; cp -r ${org}/ca/${user}/msp/signcerts/* ${user_msp}/msp/signcerts
@@ -72,8 +72,8 @@ get_user_msp()
 
         mkdir -p ${user_msp}/tls/
             cp ${org}/tlsca/${user}/msp/cacerts/*  ${user_msp}/tls/ca.crt
-            cp ${org}/tlsca/${user}/msp/signcerts/*  ${user_msp}/tls/client.crt
-            cp ${org}/tlsca/${user}/msp/keystore/*  ${user_msp}/tls/client.key
+            cp ${org}/tlsca/${user}/msp/signcerts/*  ${user_msp}/tls/server.crt
+            cp ${org}/tlsca/${user}/msp/keystore/*  ${user_msp}/tls/server.key
 
         cat config.yaml | sed "s/xxxxxxxx/cacerts\/ca.${org}.example.com-cert.pem/g" > ${user_msp}/msp/config.yaml
 
@@ -146,9 +146,13 @@ init_crypto_config() {
     enroll_user org2 ca 11056 peer1 peer
     get_user_msp org2 peer1 crypto-config/peerOrganizations/org2.example.com/peers/
 
-    # enroll_user org1 tlsca 11053 Admin admin
-    # enroll_user org1 ca 11054 Admin admin
-    # get_user_msp org1 Admin crypto-config/peerOrganizations/org1.example.com/users/
+    enroll_user org1 tlsca 11053 Admin admin
+    enroll_user org1 ca 11054 Admin admin
+    get_user_msp org1 Admin crypto-config/peerOrganizations/org1.example.com/users/
+
+    enroll_user org2 tlsca 11055 Admin admin
+    enroll_user org2 ca 11056 Admin admin
+    get_user_msp org2 Admin crypto-config/peerOrganizations/org2.example.com/users/
 }
 
 enroll_org1_user_msp() {
@@ -157,3 +161,6 @@ enroll_org1_user_msp() {
     enroll_user org1 ca 11054 ${user} client
     get_user_msp org1 ${user} crypto-config/peerOrganizations/org1.example.com/users/
 }
+
+init_crypto_config
+enroll_org1_user_msp zzding

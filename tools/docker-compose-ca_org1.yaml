@@ -15,7 +15,7 @@ services:
       - FABRIC_CA_SERVER_TLS_ENABLED=true
       - FABRIC_CA_SERVER_CSR_CN=tlsca-org1
       - FABRIC_CA_SERVER_CSR_HOSTS=0.0.0.0
-      - FABRIC_CA_SERVER_DEBUG=true
+      - FABRIC_CA_SERVER_DEBUG=false
       - FABRIC_CA_SERVER_DB_TYPE=mysql
       - FABRIC_CA_SERVER_DB_DATASOURCE=root:metaust@tcp(47.98.184.198:3306)/fabric_tlsca_org1?parseTime=true
     volumes:
@@ -34,7 +34,7 @@ services:
       - FABRIC_CA_SERVER_TLS_ENABLED=true
       - FABRIC_CA_SERVER_CSR_CN=ca-org1
       - FABRIC_CA_SERVER_CSR_HOSTS=0.0.0.0
-      - FABRIC_CA_SERVER_DEBUG=true
+      - FABRIC_CA_SERVER_DEBUG=false
       - FABRIC_CA_SERVER_DB_TYPE=mysql
       - FABRIC_CA_SERVER_DB_DATASOURCE=root:metaust@tcp(47.98.184.198:3306)/fabric_ca_org1?parseTime=true
     volumes:
