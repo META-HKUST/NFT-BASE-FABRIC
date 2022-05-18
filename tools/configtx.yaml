@@ -2,7 +2,7 @@ Organizations:
     - &OrdererOrg
         Name: OrdererOrg
         ID: OrdererMSP
-        MSPDir: crypto-config/ordererOrganizations/example.com/msp
+        MSPDir: crypto-config/ordererOrganizations/org0.example.com/msp
         Policies:
             Readers:
                 Type: Signature
@@ -34,7 +34,7 @@ Organizations:
 
         AnchorPeers:
             - Host: peer0.org1.example.com
-              Port: 7051
+              Port: 7061
 
     - &Org2
         Name: Org2MSP
@@ -56,7 +56,7 @@ Organizations:
 
         AnchorPeers:
             - Host: peer0.org2.example.com
-              Port: 8051
+              Port: 8061
 
 Capabilities:
     Channel: &ChannelCapabilities
@@ -85,7 +85,7 @@ Application: &ApplicationDefaults
             Rule: "MAJORITY Endorsement"
         Endorsement:
             Type: ImplicitMeta
-            Rule: "MAJORITY Endorsement"
+            Rule: "ANY Endorsement"
 
     Capabilities:
         <<: *ApplicationCapabilities
@@ -95,9 +95,8 @@ Orderer: &OrdererDefaults
     OrdererType: etcdraft
 
     Addresses: # orderer 集群节点
-        - orderer1.example.com:7050
-        - orderer1.example.com:7060
-        - orderer2.example.com:8050
+        - orderer1.org0.example.com:7060
+        - orderer2.org0.example.com:8060
     # Batch Timeout: The amount of time to wait before creating a batch
     BatchTimeout: 2s
 
@@ -169,17 +168,17 @@ Profiles:
             OrdererType: etcdraft
             EtcdRaft:
                 Consenters:
-                - Host: orderer1.example.com
-                  Port: 7050
-                  ClientTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/server.crt
-                  ServerTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/server.crt
-                - Host: orderer2.example.com
-                  Port: 8050
-                  ClientTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
-                  ServerTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
+                - Host: orderer1.org0.example.com
+                  Port: 7060
+                  ClientTLSCert: crypto-config/ordererOrganizations/org0.example.com/orderers/orderer1.org0.example.com/tls/server.crt
+                  ServerTLSCert: crypto-config/ordererOrganizations/org0.example.com/orderers/orderer1.org0.example.com/tls/server.crt
+                - Host: orderer2.org0.example.com
+                  Port: 8060
+                  ClientTLSCert: crypto-config/ordererOrganizations/org0.example.com/orderers/orderer2.org0.example.com/tls/server.crt
+                  ServerTLSCert: crypto-config/ordererOrganizations/org0.example.com/orderers/orderer2.org0.example.com/tls/server.crt
             Addresses:
-                - orderer1.example.com:7050
-                - orderer2.example.com:8050
+                - orderer1.org0.example.com:7060
+                - orderer2.org0.example.com:8060
             Organizations:
             - *OrdererOrg
             Capabilities:

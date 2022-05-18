@@ -1,11 +1,11 @@
 # vi /etc/hosts
-# 47.98.184.198 orderer1.example.com
-# 47.98.184.198 orderer2.example.com
+# 47.98.184.198 orderer1.org0.example.com
+# 47.98.184.198 orderer2.org0.example.com
 # 47.98.184.198 peer0.org1.example.com
 # 47.98.184.198 peer0.org2.example.com
 
-docker stop $(docker ps | grep -v ca | cut -f 1 -d " " | grep -v CON | xargs)
-docker rm $(docker ps -a | grep -v ca | cut -f 1 -d " " | grep -v CON | xargs)
+docker stop orderer1.org0.example.com orderer2.org0.example.com peer0.org1.example.com peer0.org2.example.com cli0.org1 cli0.org2
+docker rm orderer1.org0.example.com orderer2.org0.example.com peer0.org1.example.com peer0.org2.example.com cli0.org1 cli0.org2
 
 NFT_BASE_FABRIC=~/02_meta/NFT-BASE-FABRIC
 
@@ -39,4 +39,4 @@ cp ../multiple-deployment-org1/crypto-config -r .
 cp ../../tools/docker-compose-up_org2.yaml .
 docker-compose -f ./docker-compose-up_org2.yaml up -d
 
-
+cd ${NFT_BASE_FABRIC}
