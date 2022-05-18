@@ -27,7 +27,7 @@ enroll_admin()
     export FABRIC_CA_CLIENT_HOME=/tmp/hyperledger/${org}/${ca}/admin
     export FABRIC_CA_CLIENT_MSPDIR=msp
     cp /tmp/hyperledger/${org}/${ca}/crypto/ca-cert.pem /tmp/hyperledger/${org}/${ca}/crypto/${ca}-cert.pem
-    fabric-ca-client enroll -d -u https://${ca}-${org}-admin:${ca}-${org}-AdminPW@0.0.0.0:${port}
+    fabric-ca-client enroll -d -u https://${ca}-${org}-admin:${ca}-${org}-AdminPW@0.0.0.0:${port} 
 }
 
 enroll_user()
@@ -52,8 +52,13 @@ enroll_user()
     export FABRIC_CA_CLIENT_TLS_CERTFILES=/tmp/hyperledger/${org}/${ca}/crypto/${ca}-cert.pem
     export FABRIC_CA_CLIENT_HOME=/tmp/hyperledger/${org}/${ca}/${user}
     export FABRIC_CA_CLIENT_MSPDIR=msp
-    # fabric-ca-client enroll -d -u https://${user}.${org}.example.com:${user}PW@0.0.0.0:${port} --enrollment.profile tls --csr.hosts ${user}.example.com
-    fabric-ca-client enroll -d -u https://${user}.${org}.example.com:${user}PW@0.0.0.0:${port}
+    if [ $ca == ca ]
+    then
+        fabric-ca-client enroll -d -u https://${user}.${org}.example.com:${user}PW@0.0.0.0:${port} 
+    elif [ $ca == tlsca ]
+    then
+        fabric-ca-client enroll -d -u https://${user}.${org}.example.com:${user}PW@0.0.0.0:${port} --enrollment.profile tls --csr.hosts ${user}.${org}.example.com
+    fi    
 }
 
 get_user_msp()
@@ -68,10 +73,10 @@ get_user_msp()
             mkdir -p ${user_msp}/msp/cacerts; cp -r ${org}/ca/${user}/msp/cacerts/* ${user_msp}/msp/cacerts/ca.${org}.example.com-cert.pem
             mkdir -p ${user_msp}/msp/keystore; cp -r ${org}/ca/${user}/msp/keystore/* ${user_msp}/msp/keystore
             mkdir -p ${user_msp}/msp/signcerts; cp -r ${org}/ca/${user}/msp/signcerts/* ${user_msp}/msp/signcerts
-            mkdir -p ${user_msp}/msp/tlscacerts; cp ${org}/tlsca/${user}/msp/cacerts/* ${user_msp}/msp/tlscacerts/tlsca.${org}.example.com-cert.pem
+            mkdir -p ${user_msp}/msp/tlscacerts; cp ${org}/tlsca/${user}/msp/tlscacerts/* ${user_msp}/msp/tlscacerts/tlsca.${org}.example.com-cert.pem
 
         mkdir -p ${user_msp}/tls/
-            cp ${org}/tlsca/${user}/msp/cacerts/*  ${user_msp}/tls/ca.crt
+            cp ${org}/tlsca/${user}/msp/tlscacerts/*  ${user_msp}/tls/ca.crt
             cp ${org}/tlsca/${user}/msp/signcerts/*  ${user_msp}/tls/server.crt
             cp ${org}/tlsca/${user}/msp/keystore/*  ${user_msp}/tls/server.key
 
@@ -93,7 +98,7 @@ get_org_msp()
             mkdir -p ${org_msp}/msp/cacerts;  cp -r ${org}/ca/admin/msp/cacerts/* ${org_msp}/msp/cacerts/ca.${org}.example.com-cert.pem
             mkdir -p ${org_msp}/msp/keystore; cp ${org}/ca/admin/msp/keystore/* ${org_msp}/msp/keystore
             mkdir -p ${org_msp}/msp/signcerts; cp ${org}/ca/admin/msp/signcerts/* ${org_msp}/msp/signcerts
-            mkdir -p ${org_msp}/msp/tlscacerts; cp ${org}/tlsca/admin/msp/cacerts/*   ${org_msp}/msp/tlscacerts/tlsca.${org}.example.com-cert.pem
+            mkdir -p ${org_msp}/msp/tlscacerts; cp ${org}/tlsca/crypto/tlsca-cert.pem   ${org_msp}/msp/tlscacerts/tlsca.${org}.example.com-cert.pem
         mkdir -p ${org_msp}/tlsca/ #TODO
         # mkdir -p ${org_msp}/orderers/
         # mkdir -p ${org_msp}/peers/
@@ -110,53 +115,53 @@ init_crypto_config() {
     start_fabric_ca org1
     start_fabric_ca org2
 
-    enroll_admin org0 tlsca 11051
-    enroll_admin org0 ca 11052
+    enroll_admin org0 tlsca 7051
+    enroll_admin org0 ca 7052
 
-    enroll_admin org1 tlsca 11053
-    enroll_admin org1 ca 11054
+    enroll_admin org1 tlsca 7053
+    enroll_admin org1 ca 7054
 
-    enroll_admin org2 tlsca 11055
-    enroll_admin org2 ca 11056
+    enroll_admin org2 tlsca 7055
+    enroll_admin org2 ca 7056
 
-    enroll_user org0 tlsca 11051 Admin admin
-    enroll_user org0 ca 11052 Admin admin
+    enroll_user org0 tlsca 7051 Admin admin
+    enroll_user org0 ca 7052 Admin admin
     get_user_msp org0 Admin crypto-config/ordererOrganizations/org0.example.com/users/
 
-    enroll_user org1 tlsca 11053 Admin admin
-    enroll_user org1 ca 11054 Admin admin
+    enroll_user org1 tlsca 7053 Admin admin
+    enroll_user org1 ca 7054 Admin admin
     get_user_msp org1 Admin crypto-config/peerOrganizations/org1.example.com/users/
 
-    enroll_user org2 tlsca 11055 Admin admin
-    enroll_user org2 ca 11056 Admin admin
+    enroll_user org2 tlsca 7055 Admin admin
+    enroll_user org2 ca 7056 Admin admin
     get_user_msp org2 Admin crypto-config/peerOrganizations/org2.example.com/users/
 
     get_org_msp org0 crypto-config/ordererOrganizations
     get_org_msp org1 crypto-config/peerOrganizations
     get_org_msp org2 crypto-config/peerOrganizations
 
-    enroll_user org0 tlsca 11051 orderer1 orderer
-    enroll_user org0 ca 11052 orderer1 orderer
+    enroll_user org0 tlsca 7051 orderer1 orderer
+    enroll_user org0 ca 7052 orderer1 orderer
     get_user_msp org0 orderer1 crypto-config/ordererOrganizations/org0.example.com/orderers/
 
-    enroll_user org0 tlsca 11051 orderer2 orderer
-    enroll_user org0 ca 11052 orderer2 orderer
+    enroll_user org0 tlsca 7051 orderer2 orderer
+    enroll_user org0 ca 7052 orderer2 orderer
     get_user_msp org0 orderer2 crypto-config/ordererOrganizations/org0.example.com/orderers/
 
-    enroll_user org1 tlsca 11053 peer0 peer
-    enroll_user org1 ca 11054 peer0 peer
+    enroll_user org1 tlsca 7053 peer0 peer
+    enroll_user org1 ca 7054 peer0 peer
     get_user_msp org1 peer0 crypto-config/peerOrganizations/org1.example.com/peers/
 
-    enroll_user org1 tlsca 11053 peer1 peer
-    enroll_user org1 ca 11054 peer1 peer
+    enroll_user org1 tlsca 7053 peer1 peer
+    enroll_user org1 ca 7054 peer1 peer
     get_user_msp org1 peer1 crypto-config/peerOrganizations/org1.example.com/peers/
 
-    enroll_user org2 tlsca 11055 peer0 peer
-    enroll_user org2 ca 11056 peer0 peer
+    enroll_user org2 tlsca 7055 peer0 peer
+    enroll_user org2 ca 7056 peer0 peer
     get_user_msp org2 peer0 crypto-config/peerOrganizations/org2.example.com/peers/
 
-    enroll_user org2 tlsca 11055 peer1 peer
-    enroll_user org2 ca 11056 peer1 peer
+    enroll_user org2 tlsca 7055 peer1 peer
+    enroll_user org2 ca 7056 peer1 peer
     get_user_msp org2 peer1 crypto-config/peerOrganizations/org2.example.com/peers/
 
     cd ~/02_meta/NFT-BASE-FABRIC
@@ -165,8 +170,8 @@ init_crypto_config() {
 enroll_org1_user_msp() {
     cd /tmp/hyperledger
     user=$1
-    enroll_user org1 tlsca 11053 ${user} client
-    enroll_user org1 ca 11054 ${user} client
+    enroll_user org1 tlsca 7053 ${user} client
+    enroll_user org1 ca 7054 ${user} client
     get_user_msp org1 ${user} crypto-config/peerOrganizations/org1.example.com/users/
     realpath crypto-config/peerOrganizations/org1.example.com/users/${user}.org1.example.com/msp/
     cd ~/02_meta/NFT-BASE-FABRIC

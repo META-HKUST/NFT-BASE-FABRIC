@@ -9,7 +9,7 @@ services:
   tlsca-org2:
     container_name: tlsca-org2
     image: hyperledger/fabric-ca:1.5.2
-    command: /bin/sh -c 'fabric-ca-server start -d -b tlsca-org2-admin:tlsca-org2-AdminPW --port 11054'
+    command: /bin/sh -c 'fabric-ca-server start -d -b tlsca-org2-admin:tlsca-org2-AdminPW --port 7054'
     environment:
       - FABRIC_CA_SERVER_HOME=/tmp/hyperledger/fabric-ca/crypto
       - FABRIC_CA_SERVER_TLS_ENABLED=true
@@ -23,12 +23,12 @@ services:
     networks:
       - fabric-ca
     ports:
-      - 11055:11054
+      - 7055:7054
       
   ca-org2:
     container_name: ca-org2
     image: hyperledger/fabric-ca:1.5.2
-    command: /bin/sh -c 'fabric-ca-server start -d -b ca-org2-admin:ca-org2-AdminPW --port 11054'
+    command: /bin/sh -c 'fabric-ca-server start -d -b ca-org2-admin:ca-org2-AdminPW --port 7054'
     environment:
       - FABRIC_CA_SERVER_HOME=/tmp/hyperledger/fabric-ca/crypto
       - FABRIC_CA_SERVER_TLS_ENABLED=true
@@ -42,4 +42,4 @@ services:
     networks:
       - fabric-ca
     ports:
-      - 11056:11054
+      - 7056:7054

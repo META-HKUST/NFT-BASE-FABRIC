@@ -4,8 +4,8 @@
 # 47.98.184.198 peer0.org1.example.com
 # 47.98.184.198 peer0.org2.example.com
 
-docker stop orderer1.org0.example.com_2 orderer2.org0.example.com_2 peer0.org1.example.com_2 peer0.org2.example.com_2 cli0.org1_2 cli0.org2_2
-docker rm orderer1.org0.example.com_2 orderer2.org0.example.com_2 peer0.org1.example.com_2 peer0.org2.example.com_2 cli0.org1_2 cli0.org2_2
+docker stop orderer1.org0.example.com orderer2.org0.example.com peer0.org1.example.com peer0.org2.example.com cli0.org1 cli0.org2
+docker rm orderer1.org0.example.com orderer2.org0.example.com peer0.org1.example.com peer0.org2.example.com cli0.org1 cli0.org2
 
 NFT_BASE_FABRIC=~/02_meta/NFT-BASE-FABRIC
 
