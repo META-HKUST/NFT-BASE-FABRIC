@@ -64,7 +64,7 @@ get_user_msp()
 
     mkdir -p ${user_msp}
         mkdir -p ${user_msp}/msp/
-            mkdir -p ${user_msp}/msp/admincerts; cp -r ${org}/ca/admin/msp/signcerts/* ${user_msp}/msp/admincerts
+            mkdir -p ${user_msp}/msp/admincerts; cp -r ${org}/ca/Admin/msp/signcerts/* ${user_msp}/msp/admincerts
             mkdir -p ${user_msp}/msp/cacerts; cp -r ${org}/ca/${user}/msp/cacerts/* ${user_msp}/msp/cacerts/ca.${org}.example.com-cert.pem
             mkdir -p ${user_msp}/msp/keystore; cp -r ${org}/ca/${user}/msp/keystore/* ${user_msp}/msp/keystore
             mkdir -p ${user_msp}/msp/signcerts; cp -r ${org}/ca/${user}/msp/signcerts/* ${user_msp}/msp/signcerts
@@ -88,7 +88,8 @@ get_org_msp()
     mkdir -p ${org_msp}
         mkdir -p ${org_msp}/ca/ #TODO
         mkdir -p ${org_msp}/msp/
-            mkdir -p ${org_msp}/msp/admincerts; cp ${org}/ca/admin/msp/signcerts/* ${org_msp}/msp/admincerts
+            mkdir -p ${org_msp}/msp/admincerts; cp ${org}/ca/Admin/msp/signcerts/* ${org_msp}/msp/admincerts
+            echo "cp ${org}/Admin/msp/signcerts/* ${org_msp}/msp/admincerts xxxxxxxxxxxxxxxxxxxxx"
             mkdir -p ${org_msp}/msp/cacerts;  cp -r ${org}/ca/admin/msp/cacerts/* ${org_msp}/msp/cacerts/ca.${org}.example.com-cert.pem
             mkdir -p ${org_msp}/msp/keystore; cp ${org}/ca/admin/msp/keystore/* ${org_msp}/msp/keystore
             mkdir -p ${org_msp}/msp/signcerts; cp ${org}/ca/admin/msp/signcerts/* ${org_msp}/msp/signcerts
@@ -111,14 +112,27 @@ init_crypto_config() {
 
     enroll_admin org0 tlsca 11051
     enroll_admin org0 ca 11052
-    get_org_msp org0 crypto-config/ordererOrganizations
 
     enroll_admin org1 tlsca 11053
     enroll_admin org1 ca 11054
-    get_org_msp org1 crypto-config/peerOrganizations
 
     enroll_admin org2 tlsca 11055
     enroll_admin org2 ca 11056
+
+    enroll_user org0 tlsca 11051 Admin admin
+    enroll_user org0 ca 11052 Admin admin
+    get_user_msp org0 Admin crypto-config/ordererOrganizations/org0.example.com/users/
+
+    enroll_user org1 tlsca 11053 Admin admin
+    enroll_user org1 ca 11054 Admin admin
+    get_user_msp org1 Admin crypto-config/peerOrganizations/org1.example.com/users/
+
+    enroll_user org2 tlsca 11055 Admin admin
+    enroll_user org2 ca 11056 Admin admin
+    get_user_msp org2 Admin crypto-config/peerOrganizations/org2.example.com/users/
+
+    get_org_msp org0 crypto-config/ordererOrganizations
+    get_org_msp org1 crypto-config/peerOrganizations
     get_org_msp org2 crypto-config/peerOrganizations
 
     enroll_user org0 tlsca 11051 orderer1 orderer
@@ -128,7 +142,6 @@ init_crypto_config() {
     enroll_user org0 tlsca 11051 orderer2 orderer
     enroll_user org0 ca 11052 orderer2 orderer
     get_user_msp org0 orderer2 crypto-config/ordererOrganizations/org0.example.com/orderers/
-
 
     enroll_user org1 tlsca 11053 peer0 peer
     enroll_user org1 ca 11054 peer0 peer
@@ -146,13 +159,6 @@ init_crypto_config() {
     enroll_user org2 ca 11056 peer1 peer
     get_user_msp org2 peer1 crypto-config/peerOrganizations/org2.example.com/peers/
 
-    enroll_user org1 tlsca 11053 Admin admin
-    enroll_user org1 ca 11054 Admin admin
-    get_user_msp org1 Admin crypto-config/peerOrganizations/org1.example.com/users/
-
-    enroll_user org2 tlsca 11055 Admin admin
-    enroll_user org2 ca 11056 Admin admin
-    get_user_msp org2 Admin crypto-config/peerOrganizations/org2.example.com/users/
     cd ~/02_meta/NFT-BASE-FABRIC
 }
 

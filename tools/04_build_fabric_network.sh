@@ -38,3 +38,5 @@ cp ../multiple-deployment-org1/crypto-config -r .
 
 cp ../../tools/docker-compose-up_org2.yaml .
 docker-compose -f ./docker-compose-up_org2.yaml up -d
+
+cd ${NFT_BASE_FABRIC}
