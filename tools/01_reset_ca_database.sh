@@ -1,5 +1,5 @@
 #重置数据库
-mysql -u root -h localhost -p -P 3306 -pmetaust -e "
+mysql -u fabric_ca_admin -h localhost -P 3306 -pfabric_ca2022 -e "
 SHOW DATABASES;
 DROP DATABASE fabric_ca_org0;
 DROP DATABASE fabric_tlsca_org0;
@@ -17,4 +17,4 @@ CREATE DATABASE fabric_ca_org2 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
 CREATE DATABASE fabric_tlsca_org2 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
 SHOW DATABASES;
 quit"
-service mysql restart
+# service mysql restart

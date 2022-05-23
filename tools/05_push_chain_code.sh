@@ -1,9 +1,10 @@
-NFT_BASE_FABRIC=~/02_meta/NFT-BASE-FABRIC
+FABRIC_CODE=~/01_Fabric/NFT-BASE-FABRIC/
+FABRIC_ENV=~/01_Fabric/hyperledger/
 
-cd ${NFT_BASE_FABRIC}/workspace/multiple-deployment-org1
+cd ${FABRIC_ENV}/workspace/multiple-deployment-org1
 
 mkdir -p chaincode/go
-cp -r ~/02_meta/NFT-BASE-CONTRACT/chaincode-go/* chaincode/go/
+cp -r ~/01_Fabric/NFT-BASE-CONTRACT/chaincode-go/* chaincode/go/
 cd chaincode/go
 go env -w GOPROXY=https://goproxy.io,direct
 go env -w GO111MODULE=on
@@ -32,6 +33,10 @@ exit
 docker exec -it cli0.org1 bash
 go env -w GOPROXY=https://goproxy.io,direct
 go env -w GO111MODULE=on
+mkdir -p .cache/go-build
+mkdir -p .config/go
+go env -w GOENV=`pwd`/.config/go/env
+go env -w GOCACHE=`pwd`/.cache/go-build
 peer lifecycle chaincode package erc721cc.tar.gz --path /opt/gopath/src/github.com/hyperledger/multiple-deployment/chaincode/go --lang golang --label erc721cc_1
 peer lifecycle chaincode install erc721cc.tar.gz
 exit
@@ -56,4 +61,4 @@ exit
 
 
 
-cd ${NFT_BASE_FABRIC}
+cd ${FABRIC_CODE}

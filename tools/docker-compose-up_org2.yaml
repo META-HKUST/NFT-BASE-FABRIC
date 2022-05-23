@@ -2,6 +2,7 @@ version: '2'
 
 services:
   orderer2.org0.example.com:
+    user: 1003:1004
     container_name: orderer2.org0.example.com
     image: hyperledger/fabric-orderer
     environment:
@@ -23,16 +24,15 @@ services:
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
     volumes:
-        - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-        - ./crypto-config/ordererOrganizations/org0.example.com/orderers/orderer2.org0.example.com/msp:/var/hyperledger/orderer/msp
-        - ./crypto-config/ordererOrganizations/org0.example.com/orderers/orderer2.org0.example.com/tls/:/var/hyperledger/orderer/tls
+        - ./orderer/var/hyperledger/:/var/hyperledger/
     ports:
       - 8060:8060
     extra_hosts:
-      - "orderer1.org0.example.com:47.98.184.198"
-      - "orderer2.org0.example.com:47.98.184.198"
+      - "orderer1.org0.example.com:172.17.0.1"
+      - "orderer2.org0.example.com:172.17.0.1"
 
   peer0.org2.example.com:
+    user: 1003:1004
     container_name: peer0.org2.example.com
     image: hyperledger/fabric-peer
     environment:
@@ -58,16 +58,18 @@ services:
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     volumes:
-       - /var/run/:/host/var/run/
-       - ./crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp:/etc/hyperledger/fabric/msp
-       - ./crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls:/etc/hyperledger/fabric/tls
+      - ./peer/etc/hyperledger/:/etc/hyperledger/
+      - ./peer/var/hyperledger/:/var/hyperledger/
+      - /var/run/:/host/var/run/
+      - ./peer/etc/hyperledger/fabric/msp:/etc/hyperledger/fabric/msp
+      - ./peer/etc/hyperledger/fabric/tls:/etc/hyperledger/fabric/tls
     ports:
       - 8061:8061
       - 8062:8062
       - 8063:8063
     extra_hosts:
-      - "orderer1.org0.example.com:47.98.184.198"
-      - "orderer2.org0.example.com:47.98.184.198"
+      - "orderer1.org0.example.com:172.17.0.1"
+      - "orderer2.org0.example.com:172.17.0.1"
 
   cli0.org2:
     container_name: cli0.org2
@@ -77,7 +79,6 @@ services:
     environment:
       - GOPATH=/opt/gopath
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-      #- FABRIC_LOGGING_SPEC=DEBUG
       - FABRIC_LOGGING_SPEC=INFO
       - CORE_PEER_ID=cli0.org2
       - CORE_PEER_ADDRESS=peer0.org2.example.com:8061
@@ -88,14 +89,17 @@ services:
       - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt
       - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/users/Admin.org2.example.com/msp
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
-    command: /bin/bash
+    command: /bin/bash 
+    # -c 'adduser -u 1003 fabric_release -D ; su - fabric_release;'
+    user: 1003:1004
     volumes:
+        - ./cli:/opt/gopath/src/github.com/hyperledger/fabric/peer
         - /var/run/:/host/var/run/
         - ./chaincode/go/:/opt/gopath/src/github.com/hyperledger/multiple-deployment/chaincode/go
         - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
         - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     extra_hosts:
-      - "orderer1.org0.example.com:47.98.184.198"
-      - "orderer2.org0.example.com:47.98.184.198"
-      - "peer0.org1.example.com:47.98.184.198"
-      - "peer0.org2.example.com:47.98.184.198"
+      - "orderer1.org0.example.com:172.17.0.1"
+      - "orderer2.org0.example.com:172.17.0.1"
+      - "peer0.org1.example.com:172.17.0.1"
+      - "peer0.org2.example.com:172.17.0.1"

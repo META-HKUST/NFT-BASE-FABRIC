@@ -1,15 +1,19 @@
 #user相关
+tools=`dirname $0`
+source ${tools}/config.sh
+echo ${tools}, "xxxxxxxxxxxx"
 start_fabric_ca() 
 {
     #config
     org=$1
-    NFT_BASE_FABRIC=~/02_meta/NFT-BASE-FABRIC
+    NFT_BASE_FABRIC=/home/fabric_release/01_Fabric/NFT-BASE-FABRIC
 
     #init
     docker stop ca-${org} tlsca-${org}
     docker rm ca-${org} tlsca-${org}
-    rm /tmp/hyperledger/${org} -r
-
+    rm ~/01_Fabric/hyperledger/${org} -r
+    mkdir -p ~/01_Fabric/hyperledger/${org}/ca
+    mkdir -p ~/01_Fabric/hyperledger/${org}/tlsca
     #run
     docker-compose -f ${NFT_BASE_FABRIC}/tools/docker-compose-ca_${org}.yaml up -d
 }
@@ -22,11 +26,11 @@ enroll_admin()
     port=$3
     #init
     #run
-    cd /tmp/hyperledger
-    export FABRIC_CA_CLIENT_TLS_CERTFILES=/tmp/hyperledger/${org}/${ca}/crypto/${ca}-cert.pem
-    export FABRIC_CA_CLIENT_HOME=/tmp/hyperledger/${org}/${ca}/admin
+    cd ~/01_Fabric/hyperledger
+    export FABRIC_CA_CLIENT_TLS_CERTFILES=~/01_Fabric/hyperledger/${org}/${ca}/crypto/ca-cert.pem
+    export FABRIC_CA_CLIENT_HOME=~/01_Fabric/hyperledger/${org}/${ca}/admin
     export FABRIC_CA_CLIENT_MSPDIR=msp
-    cp /tmp/hyperledger/${org}/${ca}/crypto/ca-cert.pem /tmp/hyperledger/${org}/${ca}/crypto/${ca}-cert.pem
+    cp ~/01_Fabric/hyperledger/${org}/${ca}/crypto/ca-cert.pem ~/01_Fabric/hyperledger/${org}/${ca}/crypto/${ca}-cert.pem
     fabric-ca-client enroll -d -u https://${ca}-${org}-admin:${ca}-${org}-AdminPW@0.0.0.0:${port} 
 }
 
@@ -43,14 +47,14 @@ enroll_user()
 
     #run
     #注册user
-    export FABRIC_CA_CLIENT_TLS_CERTFILES=/tmp/hyperledger/${org}/${ca}/crypto/${ca}-cert.pem
-    export FABRIC_CA_CLIENT_HOME=/tmp/hyperledger/${org}/${ca}/admin
+    export FABRIC_CA_CLIENT_TLS_CERTFILES=~/01_Fabric/hyperledger/${org}/${ca}/crypto/${ca}-cert.pem
+    export FABRIC_CA_CLIENT_HOME=~/01_Fabric/hyperledger/${org}/${ca}/admin
     export FABRIC_CA_CLIENT_MSPDIR=msp
     fabric-ca-client register -d --id.name ${user}.${org}.example.com --id.secret ${user}PW --id.type ${type} -u https://0.0.0.0:${port}
     
     #登记user
-    export FABRIC_CA_CLIENT_TLS_CERTFILES=/tmp/hyperledger/${org}/${ca}/crypto/${ca}-cert.pem
-    export FABRIC_CA_CLIENT_HOME=/tmp/hyperledger/${org}/${ca}/${user}
+    export FABRIC_CA_CLIENT_TLS_CERTFILES=~/01_Fabric/hyperledger/${org}/${ca}/crypto/${ca}-cert.pem
+    export FABRIC_CA_CLIENT_HOME=~/01_Fabric/hyperledger/${org}/${ca}/${user}
     export FABRIC_CA_CLIENT_MSPDIR=msp
     if [ $ca == ca ]
     then
@@ -94,7 +98,6 @@ get_org_msp()
         mkdir -p ${org_msp}/ca/ #TODO
         mkdir -p ${org_msp}/msp/
             mkdir -p ${org_msp}/msp/admincerts; cp ${org}/ca/Admin/msp/signcerts/* ${org_msp}/msp/admincerts
-            echo "cp ${org}/Admin/msp/signcerts/* ${org_msp}/msp/admincerts xxxxxxxxxxxxxxxxxxxxx"
             mkdir -p ${org_msp}/msp/cacerts;  cp -r ${org}/ca/admin/msp/cacerts/* ${org_msp}/msp/cacerts/ca.${org}.example.com-cert.pem
             mkdir -p ${org_msp}/msp/keystore; cp ${org}/ca/admin/msp/keystore/* ${org_msp}/msp/keystore
             mkdir -p ${org_msp}/msp/signcerts; cp ${org}/ca/admin/msp/signcerts/* ${org_msp}/msp/signcerts
@@ -107,13 +110,15 @@ get_org_msp()
 }
 
 init_crypto_config() {
-    cd /tmp/hyperledger
+    cd ~/01_Fabric/hyperledger
     rm crypto-config -r
-    ln -s ~/02_meta/NFT-BASE-FABRIC/tools/config.yaml /tmp/hyperledger/
+    rm config.yaml
+    ln -s ~/01_Fabric/NFT-BASE-FABRIC/tools/config.yaml ~/01_Fabric/hyperledger/
 
     start_fabric_ca org0
     start_fabric_ca org1
     start_fabric_ca org2
+    sleep 5
 
     enroll_admin org0 tlsca 7051
     enroll_admin org0 ca 7052
@@ -164,15 +169,15 @@ init_crypto_config() {
     enroll_user org2 ca 7056 peer1 peer
     get_user_msp org2 peer1 crypto-config/peerOrganizations/org2.example.com/peers/
 
-    cd ~/02_meta/NFT-BASE-FABRIC
+    cd ~/01_Fabric/NFT-BASE-FABRIC
 }
 
 enroll_org1_user_msp() {
-    cd /tmp/hyperledger
+    cd ~/01_Fabric/hyperledger
     user=$1
     enroll_user org1 tlsca 7053 ${user} client
     enroll_user org1 ca 7054 ${user} client
     get_user_msp org1 ${user} crypto-config/peerOrganizations/org1.example.com/users/
     realpath crypto-config/peerOrganizations/org1.example.com/users/${user}.org1.example.com/msp/
-    cd ~/02_meta/NFT-BASE-FABRIC
+    cd ~/01_Fabric/NFT-BASE-FABRIC
 }
