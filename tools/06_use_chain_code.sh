@@ -21,7 +21,7 @@ export CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/pee
 peer chaincode invoke -o orderer1.org0.example.com:7060 \
     --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/org0.example.com/orderers/orderer1.org0.example.com/msp/tlscacerts/tlsca.org0.example.com-cert.pem \
     -C mychannel -n erc721cc \
-    -c '{"Args":["MintWithTokenURI","5","http:example/com"]}' --waitForEvent \
+    -c '{"Args":["MintWithTokenURI","100","http:example/com"]}' --waitForEvent \
     --peerAddresses peer0.org1.example.com:7061 \
     --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt 
     # --peerAddresses peer0.org2.example.com:8051 \

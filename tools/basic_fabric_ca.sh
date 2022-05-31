@@ -56,6 +56,7 @@ enroll_user()
     export FABRIC_CA_CLIENT_TLS_CERTFILES=~/01_Fabric/hyperledger/${org}/${ca}/crypto/${ca}-cert.pem
     export FABRIC_CA_CLIENT_HOME=~/01_Fabric/hyperledger/${org}/${ca}/${user}
     export FABRIC_CA_CLIENT_MSPDIR=msp
+    rm -r ~/01_Fabric/hyperledger/${org}/${ca}/${user} 
     if [ $ca == ca ]
     then
         fabric-ca-client enroll -d -u https://${user}.${org}.example.com:${user}PW@0.0.0.0:${port} 
@@ -71,6 +72,7 @@ get_user_msp()
     user=$2
     user_msp=${3}/${2}.${1}.example.com
 
+    rm -r ${user_msp}
     mkdir -p ${user_msp}
         mkdir -p ${user_msp}/msp/
             mkdir -p ${user_msp}/msp/admincerts; cp -r ${org}/ca/Admin/msp/signcerts/* ${user_msp}/msp/admincerts
@@ -179,5 +181,16 @@ enroll_org1_user_msp() {
     enroll_user org1 ca 7054 ${user} client
     get_user_msp org1 ${user} crypto-config/peerOrganizations/org1.example.com/users/
     realpath crypto-config/peerOrganizations/org1.example.com/users/${user}.org1.example.com/msp/
+    cd ~/01_Fabric/NFT-BASE-FABRIC
+}
+
+
+enroll_org2_user_msp() {
+    cd ~/01_Fabric/hyperledger
+    user=$1
+    enroll_user org2 tlsca 7055 ${user} client
+    enroll_user org2 ca 7056 ${user} client
+    get_user_msp org2 ${user} crypto-config/peerOrganizations/org2.example.com/users/
+    realpath crypto-config/peerOrganizations/org2.example.com/users/${user}.org2.example.com/msp/
     cd ~/01_Fabric/NFT-BASE-FABRIC
 }
