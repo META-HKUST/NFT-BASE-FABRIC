@@ -2,7 +2,10 @@ version: '2.0'
 
 networks:
   fabric-ca:
-    name: fabric-ca
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 172.18.0.0/16
 
 services:
   tlsca-org2:
@@ -21,7 +24,8 @@ services:
     volumes:
       - ~/01_Fabric/hyperledger/org2/tlsca:/tmp/hyperledger/fabric-ca
     networks:
-      - fabric-ca
+      fabric-ca:
+        ipv4_address: 172.18.0.15
     ports:
       - 7055:7054
       
@@ -41,6 +45,8 @@ services:
     volumes:
       - ~/01_Fabric/hyperledger/org2/ca:/tmp/hyperledger/fabric-ca
     networks:
-      - fabric-ca
+      fabric-ca:
+        ipv4_address: 172.18.0.16
     ports:
       - 7056:7054
+

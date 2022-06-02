@@ -1,3 +1,5 @@
+#v1 0328d427e82cdb30bbcf17b0e11a0b30520ab438
+#v2 
 FABRIC_CODE=~/01_Fabric/NFT-BASE-FABRIC/
 FABRIC_ENV=~/01_Fabric/hyperledger/
 
@@ -35,8 +37,8 @@ go env -w GOPROXY=https://goproxy.io,direct
 go env -w GO111MODULE=on
 mkdir -p .cache/go-build
 mkdir -p .config/go
-go env -w GOENV=`pwd`/.config/go/env
-go env -w GOCACHE=`pwd`/.cache/go-build
+export GOENV=`pwd`/.config/go/env
+export GOCACHE=`pwd`/.cache/go-build
 peer lifecycle chaincode package erc721cc.tar.gz --path /opt/gopath/src/github.com/hyperledger/multiple-deployment/chaincode/go --lang golang --label erc721cc_1
 peer lifecycle chaincode install erc721cc.tar.gz
 exit

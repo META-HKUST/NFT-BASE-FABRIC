@@ -1,5 +1,5 @@
 #重置数据库
-mysql -u fabric_ca_admin -h localhost -P 3306 -pfabric_ca2022 -e "
+mysql -u fabric_ca_admin -h localhost -P 3306 -p -e "
 SHOW DATABASES;
 DROP DATABASE fabric_ca_org0;
 DROP DATABASE fabric_tlsca_org0;

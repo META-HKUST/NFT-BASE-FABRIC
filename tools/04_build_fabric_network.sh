@@ -32,8 +32,10 @@ cp -r ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.exampl
 mkdir -p ./peer/var/hyperledger/
 mkdir -p ./chaincode/go/
 mkdir -p ./cli
-
-
+mkdir -p ./cli/channel-artifacts
+mkdir -p ./cli/crypto
+cp -r ./channel-artifacts/* ./cli/channel-artifacts/
+cp -r ./crypto-config/* ./cli/crypto/
 
 cp ${FABRIC_CODE}/tools/docker-compose-up_org1.yaml .
 docker-compose -f ./docker-compose-up_org1.yaml up -d
@@ -57,6 +59,10 @@ cp -r ./crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.exampl
 mkdir -p ./peer/var/hyperledger/
 mkdir -p ./chaincode/go/
 mkdir -p ./cli
+mkdir -p ./cli/channel-artifacts
+mkdir -p ./cli/crypto
+cp -r ./channel-artifacts/* ./cli/channel-artifacts/
+cp -r ./crypto-config/* ./cli/crypto/
 
 cp ${FABRIC_CODE}/tools/docker-compose-up_org2.yaml .
 docker-compose -f ./docker-compose-up_org2.yaml up -d

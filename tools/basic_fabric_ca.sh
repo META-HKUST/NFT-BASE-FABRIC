@@ -1,7 +1,6 @@
 #user相关
 tools=`dirname $0`
 source ${tools}/config.sh
-echo ${tools}, "xxxxxxxxxxxx"
 start_fabric_ca() 
 {
     #config
