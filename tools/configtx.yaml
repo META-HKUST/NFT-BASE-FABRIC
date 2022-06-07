@@ -2,7 +2,7 @@ Organizations:
     - &OrdererOrg
         Name: OrdererOrg
         ID: OrdererMSP
-        MSPDir: crypto-config/ordererOrganizations/org0.example.com/msp
+        MSPDir: crypto-config/ordererOrganizations/org0.unifit.com/msp
         Policies:
             Readers:
                 Type: Signature
@@ -17,7 +17,7 @@ Organizations:
     - &Org1
         Name: Org1MSP
         ID: Org1MSP
-        MSPDir: crypto-config/peerOrganizations/org1.example.com/msp
+        MSPDir: crypto-config/peerOrganizations/org1.unifit.com/msp
         Policies:
             Readers:
                 Type: Signature
@@ -33,13 +33,13 @@ Organizations:
                 Rule: "OR('Org1MSP.peer')"
 
         AnchorPeers:
-            - Host: peer0.org1.example.com
+            - Host: peer0.org1.unifit.com
               Port: 7061
 
     - &Org2
         Name: Org2MSP
         ID: Org2MSP
-        MSPDir: crypto-config/peerOrganizations/org2.example.com/msp
+        MSPDir: crypto-config/peerOrganizations/org2.unifit.com/msp
         Policies:
             Readers:
                 Type: Signature
@@ -55,7 +55,7 @@ Organizations:
                 Rule: "OR('Org2MSP.peer')"
 
         AnchorPeers:
-            - Host: peer0.org2.example.com
+            - Host: peer0.org2.unifit.com
               Port: 8061
 
 Capabilities:
@@ -95,8 +95,8 @@ Orderer: &OrdererDefaults
     OrdererType: etcdraft
 
     Addresses: # orderer 集群节点
-        - orderer1.org0.example.com:7060
-        - orderer2.org0.example.com:8060
+        - orderer1.org0.unifit.com:7060
+        - orderer2.org0.unifit.com:8060
     # Batch Timeout: The amount of time to wait before creating a batch
     BatchTimeout: 2s
 
@@ -168,17 +168,17 @@ Profiles:
             OrdererType: etcdraft
             EtcdRaft:
                 Consenters:
-                - Host: orderer1.org0.example.com
+                - Host: orderer1.org0.unifit.com
                   Port: 7060
-                  ClientTLSCert: crypto-config/ordererOrganizations/org0.example.com/orderers/orderer1.org0.example.com/tls/server.crt
-                  ServerTLSCert: crypto-config/ordererOrganizations/org0.example.com/orderers/orderer1.org0.example.com/tls/server.crt
-                - Host: orderer2.org0.example.com
+                  ClientTLSCert: crypto-config/ordererOrganizations/org0.unifit.com/orderers/orderer1.org0.unifit.com/tls/server.crt
+                  ServerTLSCert: crypto-config/ordererOrganizations/org0.unifit.com/orderers/orderer1.org0.unifit.com/tls/server.crt
+                - Host: orderer2.org0.unifit.com
                   Port: 8060
-                  ClientTLSCert: crypto-config/ordererOrganizations/org0.example.com/orderers/orderer2.org0.example.com/tls/server.crt
-                  ServerTLSCert: crypto-config/ordererOrganizations/org0.example.com/orderers/orderer2.org0.example.com/tls/server.crt
+                  ClientTLSCert: crypto-config/ordererOrganizations/org0.unifit.com/orderers/orderer2.org0.unifit.com/tls/server.crt
+                  ServerTLSCert: crypto-config/ordererOrganizations/org0.unifit.com/orderers/orderer2.org0.unifit.com/tls/server.crt
             Addresses:
-                - orderer1.org0.example.com:7060
-                - orderer2.org0.example.com:8060
+                - orderer1.org0.unifit.com:7060
+                - orderer2.org0.unifit.com:8060
             Organizations:
             - *OrdererOrg
             Capabilities:

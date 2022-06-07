@@ -1,6 +1,6 @@
 OrdererOrgs:
   - Name: Orderer
-    Domain: org0.example.com
+    Domain: org0.unifit.com
     EnableNodeOUs: true
     Specs:
       - Hostname: orderer1
@@ -8,14 +8,14 @@ OrdererOrgs:
 
 PeerOrgs:
   - Name: Org1
-    Domain: org1.example.com
+    Domain: org1.unifit.com
     EnableNodeOUs: true
     Template:
       Count: 2
     Users:
       Count: 1
   - Name: Org2
-    Domain: org2.example.com
+    Domain: org2.unifit.com
     EnableNodeOUs: true
     Template:
       Count: 2

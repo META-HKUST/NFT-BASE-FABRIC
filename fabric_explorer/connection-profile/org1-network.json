@@ -1,0 +1,48 @@
+{
+	"name": "org1-network",
+	"version": "1.0.0",
+	"client": {
+		"tlsEnable": true,
+		"adminCredential": {
+			"id": "admin",
+			"password": "admin2022"
+		},
+		"enableAuthentication": true,
+		"organization": "Org1MSP",
+		"connection": {
+			"timeout": {
+				"peer": {
+					"endorser": "300"
+				},
+				"orderer": "300"
+			}
+		}
+	},
+	"channels": {
+		"unifitchannel": {
+			"peers": {
+				"peer0.org1.unifit.com": {}
+			}
+		}
+	},
+	"organizations": {
+		"Org1MSP": {
+			"mspid": "Org1MSP",
+			"adminPrivateKey": {
+				"path": "/tmp/crypto/peerOrganizations/org1.unifit.com/users/fabric_exlporer.org1.unifit.com/msp/keystore/priv_sk"
+			},
+			"peers": ["peer0.org1.unifit.com"],
+			"signedCert": {
+				"path": "/tmp/crypto/peerOrganizations/org1.unifit.com/users/fabric_exlporer.org1.unifit.com/msp/signcerts/cert.pem"
+			}
+		}
+	},
+	"peers": {
+		"peer0.org1.unifit.com": {
+			"tlsCACerts": {
+				"path": "/tmp/crypto/peerOrganizations/org1.unifit.com/peers/peer0.org1.unifit.com/tls/ca.crt"
+			},
+			"url": "grpcs://peer0.org1.unifit.com:7061"
+		}
+	}
+}

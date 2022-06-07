@@ -1,8 +1,9 @@
 version: '2'
 
 services:
-  orderer1.org0.example.com:
-    container_name: orderer1.org0.example.com
+  orderer1.org0.unifit.com:
+    user: 1003:1004
+    container_name: orderer1.org0.unifit.com
     image: hyperledger/fabric-orderer
     environment:
       - FABRIC_LOGGING_SPEC=INFO
@@ -23,27 +24,31 @@ services:
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
     volumes:
-        - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-        - ./crypto-config/ordererOrganizations/org0.example.com/orderers/orderer1.org0.example.com/msp:/var/hyperledger/orderer/msp
-        - ./crypto-config/ordererOrganizations/org0.example.com/orderers/orderer1.org0.example.com/tls/:/var/hyperledger/orderer/tls
+        - ./orderer/var/hyperledger/:/var/hyperledger/
+        # - ./orderer/var/hyperledger/orderer/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+        # - ./orderer/var/hyperledger/orderer/msp:/var/hyperledger/orderer/msp/
+        # - ./orderer/var/hyperledger/orderer/tls:/var/hyperledger/orderer/tls/
+        # - ./crypto-config/ordererOrganizations/org0.unifit.com/orderers/orderer1.org0.unifit.com/msp:/var/hyperledger/orderer/msp
+        # - ./crypto-config/ordererOrganizations/org0.unifit.com/orderers/orderer1.org0.unifit.com/tls/:/var/hyperledger/orderer/tls
     ports:
       - 7060:7060
     extra_hosts:
-      - "orderer1.org0.example.com:47.98.184.198"
-      - "orderer2.org0.example.com:47.98.184.198"
+      - "orderer1.org0.unifit.com:172.17.0.1"
+      - "orderer2.org0.unifit.com:172.17.0.1"
 
-  peer0.org1.example.com:
-    container_name: peer0.org1.example.com
+  peer0.org1.unifit.com:
+    user: 1003:1004
+    container_name: peer0.org1.unifit.com
     image: hyperledger/fabric-peer
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-      - CORE_PEER_ID=peer0.org1.example.com
-      - CORE_PEER_ADDRESS=peer0.org1.example.com:7061
+      - CORE_PEER_ID=peer0.org1.unifit.com
+      - CORE_PEER_ADDRESS=peer0.org1.unifit.com:7061
       - CORE_PEER_LISTENADDRESS=0.0.0.0:7061
-      - CORE_PEER_CHAINCODEADDRESS=peer0.org1.example.com:7062
+      - CORE_PEER_CHAINCODEADDRESS=peer0.org1.unifit.com:7062
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7062
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.example.com:7061
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.example.com:7061
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.unifit.com:7061
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.unifit.com:7061
       - CORE_PEER_LOCALMSPID=Org1MSP
       - FABRIC_LOGGING_SPEC=INFO
       - CORE_PEER_TLS_ENABLED=true
@@ -58,16 +63,18 @@ services:
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     volumes:
-       - /var/run/:/host/var/run/
-       - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/fabric/msp
-       - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls:/etc/hyperledger/fabric/tls
+      - /var/run/:/host/var/run/
+      - ./peer/etc/hyperledger/:/etc/hyperledger/
+      - ./peer/var/hyperledger/:/var/hyperledger/
+      - ./peer/etc/hyperledger/fabric/msp:/etc/hyperledger/fabric/msp/
+      - ./peer/etc/hyperledger/fabric/tls:/etc/hyperledger/fabric/tls/
     ports:
       - 7061:7061
       - 7062:7062
       - 7063:7063
     extra_hosts:
-      - "orderer1.org0.example.com:47.98.184.198"
-      - "orderer2.org0.example.com:47.98.184.198"
+      - "orderer1.org0.unifit.com:172.17.0.1"
+      - "orderer2.org0.unifit.com:172.17.0.1"
 
   cli0.org1:
     container_name: cli0.org1
@@ -79,23 +86,28 @@ services:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - FABRIC_LOGGING_SPEC=INFO
       - CORE_PEER_ID=cli0.org1
-      - CORE_PEER_ADDRESS=peer0.org1.example.com:7061
+      - CORE_PEER_ADDRESS=peer0.org1.unifit.com:7061
       - CORE_PEER_LOCALMSPID=Org1MSP
       - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
-      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin.org1.example.com/msp
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.unifit.com/peers/peer0.org1.unifit.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.unifit.com/peers/peer0.org1.unifit.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.unifit.com/peers/peer0.org1.unifit.com/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.unifit.com/users/Admin.org1.unifit.com/msp
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
-    command: /bin/bash
+    command: /bin/bash 
+    # -c 'adduser -u 1003 user -D; usermod -aG fabric root; su - user;'
+    user: 1003:1004
     volumes:
-        - /var/run/:/host/var/run/
-        - ./chaincode/go/:/opt/gopath/src/github.com/hyperledger/multiple-deployment/chaincode/go
-        - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
-        - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+      - ./cli:/opt/gopath/src/github.com/hyperledger/fabric/peer
+      - /var/run/:/host/var/run/
+      - ./chaincode/go/:/opt/gopath/src/github.com/hyperledger/multiple-deployment/chaincode/go
+      # - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto-config/
+      # - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+      - ./cli/crypto:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+      - ./cli/channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     extra_hosts:
-      - "orderer1.org0.example.com:47.98.184.198"
-      - "orderer2.org0.example.com:47.98.184.198"
-      - "peer0.org1.example.com:47.98.184.198"
-      - "peer0.org2.example.com:47.98.184.198"
+      - "orderer1.org0.unifit.com:172.17.0.1"
+      - "orderer2.org0.unifit.com:172.17.0.1"
+      - "peer0.org1.unifit.com:172.17.0.1"
+      - "peer0.org2.unifit.com:172.17.0.1"
 
