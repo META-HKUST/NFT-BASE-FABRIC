@@ -3,8 +3,8 @@ source ${tools}/config.sh
 # FABRIC_CODE=~/01_Fabric/NFT-BASE-FABRIC/
 # FABRIC_ENV=~/01_Fabric/hyperledger/
 
-docker stop orderer1.org0.unifit.com orderer2.org0.unifit.com peer0.org1.unifit.com peer0.org2.unifit.com cli0.org1 cli0.org2
-docker rm orderer1.org0.unifit.com orderer2.org0.unifit.com peer0.org1.unifit.com peer0.org2.unifit.com cli0.org1 cli0.org2
+docker stop orderer1.org0.unifit.com orderer2.org0.unifit.com peer0.org1.unifit.com peer0.org2.unifit.com cli0.org1 cli0.org2 couchdb0.org1.unifit.com couchdb0.org2.unifit.com 
+docker rm orderer1.org0.unifit.com orderer2.org0.unifit.com peer0.org1.unifit.com peer0.org2.unifit.com cli0.org1 cli0.org2 couchdb0.org1.unifit.com couchdb0.org2.unifit.com
 
 mkdir -p ${FABRIC_ENV}/workspace
 
@@ -36,6 +36,7 @@ mkdir -p ./cli/channel-artifacts
 mkdir -p ./cli/crypto
 cp -r ./channel-artifacts/* ./cli/channel-artifacts/
 cp -r ./crypto-config/* ./cli/crypto/
+mkdir -p ./couchdb/data
 
 cp ${FABRIC_CODE}/tools/docker-compose-up_org1.yaml .
 docker-compose -f ./docker-compose-up_org1.yaml up -d
@@ -63,6 +64,7 @@ mkdir -p ./cli/channel-artifacts
 mkdir -p ./cli/crypto
 cp -r ./channel-artifacts/* ./cli/channel-artifacts/
 cp -r ./crypto-config/* ./cli/crypto/
+mkdir -p ./couchdb/data
 
 cp ${FABRIC_CODE}/tools/docker-compose-up_org2.yaml .
 docker-compose -f ./docker-compose-up_org2.yaml up -d

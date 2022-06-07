@@ -25,11 +25,9 @@ services:
       timeout: 10s
       retries: 5
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - ./pgdata:/var/lib/postgresql/data
     networks:
       - mynetwork.com
-
-      
 
   explorer.mynetwork.com:
     image: hyperledger/explorer:latest
@@ -50,7 +48,7 @@ services:
       - ./config.json:/opt/explorer/app/platform/fabric/config.json
       - ./connection-profile:/opt/explorer/app/platform/fabric/connection-profile
       - ./crypto-config:/tmp/crypto
-      - walletstore:/opt/explorer/wallet
+      - ./walletstore:/opt/explorer/wallet
     ports:
       - 8887:8080
     depends_on:

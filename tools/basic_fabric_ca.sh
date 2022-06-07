@@ -118,7 +118,7 @@ get_connection()
     org_msp=$4/org${org}.unifit.com
     tls_ca=${org_msp}/msp/tlscacerts/tlsca.org${org}.unifit.com-cert.pem
     pem=`cat ${tls_ca} | sed "s/ /@@@@/g" | xargs | sed "s/ /####/g" | sed "s/\//%%%%/g"`
-    cat connection.yaml | sed "s/\${ORG}/${org}/g" | sed "s/\${P0PORT}/${port}/g" | sed "s/\${CAPORT}/${ca_port}/g" | sed "s/\${PEERPEM}/${pem}/g" | sed "s/@@@@/ /g" | sed "s/####/\n\t/g" | sed "s/%%%%/\//g" > ${org_msp}/connection-org${org}.yaml
+    cat connection.yaml | sed "s/\${ORG}/${org}/g" | sed "s/\${P0PORT}/${port}/g" | sed "s/\${CAPORT}/${ca_port}/g" | sed "s/\${PEERPEM}/${pem}/g" | sed "s/\${CAPEM}/${pem}/g" | sed "s/@@@@/ /g" | sed "s/####/\n\          /g" | sed "s/%%%%/\//g" > ${org_msp}/connection-org${org}.yaml
 }
 
 init_crypto_config() {
