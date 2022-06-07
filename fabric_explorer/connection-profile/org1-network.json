@@ -29,11 +29,11 @@
 		"Org1MSP": {
 			"mspid": "Org1MSP",
 			"adminPrivateKey": {
-				"path": "/tmp/crypto/peerOrganizations/org1.unifit.com/users/fabric_exlporer.org1.unifit.com/msp/keystore/priv_sk"
+				"path": "/tmp/crypto/peerOrganizations/org1.unifit.com/users/fabric_explorer.org1.unifit.com/msp/keystore/priv_sk"
 			},
 			"peers": ["peer0.org1.unifit.com"],
 			"signedCert": {
-				"path": "/tmp/crypto/peerOrganizations/org1.unifit.com/users/fabric_exlporer.org1.unifit.com/msp/signcerts/cert.pem"
+				"path": "/tmp/crypto/peerOrganizations/org1.unifit.com/users/fabric_explorer.org1.unifit.com/msp/signcerts/cert.pem"
 			}
 		}
 	},
