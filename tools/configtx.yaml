@@ -103,7 +103,7 @@ Orderer: &OrdererDefaults
     # Batch Size: Controls the number of messages batched into a block
     BatchSize:
 
-        MaxMessageCount: 10
+        MaxMessageCount: 100
 
         AbsoluteMaxBytes: 99 MB
 

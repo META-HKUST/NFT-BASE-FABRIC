@@ -41,10 +41,17 @@ peer chaincode invoke -o orderer1.org0.unifit.com:7060 \
     --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/org0.unifit.com/orderers/orderer1.org0.unifit.com/msp/tlscacerts/tlsca.org0.unifit.com-cert.pem \
     -C unifitchannel -n unifitPublicNFT \
     -c '{"Args":["PublicMint"]}' --waitForEvent \
+    --peerAddresses peer0.org2.unifit.com:8061 \
+    --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.unifit.com/peers/peer0.org2.unifit.com/tls/ca.crt
+    # --peerAddresses peer0.org1.unifit.com:7061 \
+    # --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.unifit.com/peers/peer0.org1.unifit.com/tls/ca.crt 
+
+peer chaincode invoke -o orderer1.org0.unifit.com:7060 \
+    --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/org0.unifit.com/orderers/orderer1.org0.unifit.com/msp/tlscacerts/tlsca.org0.unifit.com-cert.pem \
+    -C unifitchannel -n unifitPublicNFT \
+    -c '{"Args":["PublicMint"]}' --waitForEvent \
     --peerAddresses peer0.org1.unifit.com:7061 \
     --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.unifit.com/peers/peer0.org1.unifit.com/tls/ca.crt 
-    # --peerAddresses peer0.org2.unifit.com:8051 \
-    # --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.unifit.com/peers/peer0.org2.unifit.com/tls/ca.crt \
 
 
 export CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.unifit.com/peers/peer0.org1.unifit.com/tls/server.crt
