@@ -34,7 +34,7 @@ Organizations:
 
         AnchorPeers:
             - Host: peer0.org1.unifit.com
-              Port: 7061
+              Port: 7070
 
     - &Org2
         Name: Org2MSP
@@ -56,7 +56,7 @@ Organizations:
 
         AnchorPeers:
             - Host: peer0.org2.unifit.com
-              Port: 8061
+              Port: 8070
 
 Capabilities:
     Channel: &ChannelCapabilities

@@ -3,7 +3,7 @@ version: '2'
 services:
 
   couchdb0.org1.unifit.com:
-    # user: 1003:1004
+    # user: 1014:1014
     container_name: couchdb0.org1.unifit.com
     image: hyperledger/fabric-couchdb
     # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
@@ -16,10 +16,10 @@ services:
     # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
     # for example map it to utilize Fauxton User Interface in dev environments.
     ports:
-      - "7084:5984"
+      - "7052:5984"
 
   orderer1.org0.unifit.com:
-    user: 1003:1004
+    user: 1014:1014
     container_name: orderer1.org0.unifit.com
     image: hyperledger/fabric-orderer
     environment:
@@ -54,18 +54,18 @@ services:
       - "orderer2.org0.unifit.com:172.17.0.1"
 
   peer0.org1.unifit.com:
-    user: 1003:1004
+    user: 1014:1014
     container_name: peer0.org1.unifit.com
     image: hyperledger/fabric-peer
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_PEER_ID=peer0.org1.unifit.com
-      - CORE_PEER_ADDRESS=peer0.org1.unifit.com:7061
-      - CORE_PEER_LISTENADDRESS=0.0.0.0:7061
-      - CORE_PEER_CHAINCODEADDRESS=peer0.org1.unifit.com:7062
-      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7062
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.unifit.com:7061
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.unifit.com:7061
+      - CORE_PEER_ADDRESS=peer0.org1.unifit.com:7070
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7070
+      - CORE_PEER_CHAINCODEADDRESS=peer0.org1.unifit.com:7071
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7071
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.unifit.com:7072
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.unifit.com:7072
       - CORE_PEER_LOCALMSPID=Org1MSP
       - FABRIC_LOGGING_SPEC=INFO
       - CORE_PEER_TLS_ENABLED=true
@@ -90,9 +90,9 @@ services:
       - ./peer/etc/hyperledger/fabric/msp:/etc/hyperledger/fabric/msp/
       - ./peer/etc/hyperledger/fabric/tls:/etc/hyperledger/fabric/tls/
     ports:
-      - 7061:7061
-      - 7062:7062
-      - 7063:7063
+      - 7070:7070
+      - 7071:7071
+      - 7072:7072
     extra_hosts:
       - "orderer1.org0.unifit.com:172.17.0.1"
       - "orderer2.org0.unifit.com:172.17.0.1"
@@ -107,7 +107,7 @@ services:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - FABRIC_LOGGING_SPEC=INFO
       - CORE_PEER_ID=cli0.org1
-      - CORE_PEER_ADDRESS=peer0.org1.unifit.com:7061
+      - CORE_PEER_ADDRESS=peer0.org1.unifit.com:7070
       - CORE_PEER_LOCALMSPID=Org1MSP
       - CORE_PEER_TLS_ENABLED=true
       - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.unifit.com/peers/peer0.org1.unifit.com/tls/server.crt
@@ -117,7 +117,7 @@ services:
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: /bin/bash 
     # -c 'adduser -u 1003 user -D; usermod -aG fabric root; su - user;'
-    user: 1003:1004
+    user: 1014:1014
     volumes:
       - ./cli:/opt/gopath/src/github.com/hyperledger/fabric/peer
       - /var/run/:/host/var/run/

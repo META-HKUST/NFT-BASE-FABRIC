@@ -7,7 +7,7 @@ FABRIC_ENV=~/01_Fabric/hyperledger/
 cd ${FABRIC_ENV}/workspace/multiple-deployment-org1
 
 mkdir -p chaincode/go
-cp -r ~/01_Fabric/NFT-BASE-CONTRACT/chaincode-go/* chaincode/go/
+cp -r ~/02_ChainCode/NFT-BASE-CONTRACT/chaincode-go/* chaincode/go/
 cd chaincode/go
 go env -w GOPROXY=https://goproxy.io,direct
 go env -w GO111MODULE=on
@@ -59,7 +59,7 @@ docker exec -it cli0.org1 bash -c "
 package_id=\`peer lifecycle chaincode queryinstalled | grep unifitPublicNFT | cut -f 3 -d ' ' | sed 's/,//g'\`
 peer lifecycle chaincode approveformyorg --channelID unifitchannel --name unifitPublicNFT --version 1.0 --init-required --package-id \${package_id} --sequence 1 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/org0.unifit.com/orderers/orderer1.org0.unifit.com/msp/tlscacerts/tlsca.org0.unifit.com-cert.pem
 peer lifecycle chaincode checkcommitreadiness --channelID unifitchannel --name unifitPublicNFT --version 1.0 --init-required --sequence 1 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/org0.unifit.com/orderers/orderer1.org0.unifit.com/msp/tlscacerts/tlsca.org0.unifit.com-cert.pem --output json
-peer lifecycle chaincode commit -o orderer1.org0.unifit.com:7060 --channelID unifitchannel --name unifitPublicNFT --version 1.0 --sequence 1 --init-required --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/org0.unifit.com/orderers/orderer1.org0.unifit.com/msp/tlscacerts/tlsca.org0.unifit.com-cert.pem --peerAddresses peer0.org1.unifit.com:7061 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.unifit.com/peers/peer0.org1.unifit.com/tls/ca.crt --peerAddresses peer0.org2.unifit.com:8061 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.unifit.com/peers/peer0.org2.unifit.com/tls/ca.crt
+peer lifecycle chaincode commit -o orderer1.org0.unifit.com:7060 --channelID unifitchannel --name unifitPublicNFT --version 1.0 --sequence 1 --init-required --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/org0.unifit.com/orderers/orderer1.org0.unifit.com/msp/tlscacerts/tlsca.org0.unifit.com-cert.pem --peerAddresses peer0.org1.unifit.com:7070 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.unifit.com/peers/peer0.org1.unifit.com/tls/ca.crt --peerAddresses peer0.org2.unifit.com:8070 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.unifit.com/peers/peer0.org2.unifit.com/tls/ca.crt
 "
 
 

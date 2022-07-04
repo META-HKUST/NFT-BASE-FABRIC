@@ -9,7 +9,7 @@ networks:
 
 services:
   tlsca-org0:
-    user: 1003:1004
+    user: 1014:1014
     container_name: tlsca-org0
     image: hyperledger/fabric-ca:1.5.2
     command: /bin/sh -c 'fabric-ca-server start -d -b tlsca-org0-admin:tlsca-org0-AdminPW --port 7054'
@@ -20,17 +20,18 @@ services:
       - FABRIC_CA_SERVER_CSR_HOSTS=0.0.0.0
       - FABRIC_CA_SERVER_DEBUG=false
       - FABRIC_CA_SERVER_DB_TYPE=mysql
-      - FABRIC_CA_SERVER_DB_DATASOURCE=fabric_ca_admin:fabric_ca2022@tcp(172.17.0.1:3306)/fabric_tlsca_org0?parseTime=true
+      - FABRIC_CA_SERVER_DB_DATASOURCE=fabric_ca_org_admin:fabric_ca_org2022@tcp(pascal.ieda.ust.hk:3306)/fabric_tlsca_org?parseTime=true
     volumes:
       - ~/01_Fabric/hyperledger/org0/tlsca:/tmp/hyperledger/fabric-ca
     networks:
       fabric-ca:
         ipv4_address: 172.18.0.11
     ports:
-      - 7051:7054
+      - 6050:7054
+
 
   ca-org0:
-    user: 1003:1004
+    user: 1014:1014
     container_name: ca-org0
     image: hyperledger/fabric-ca:1.5.2
     command: /bin/sh -c 'fabric-ca-server start -d -b ca-org0-admin:ca-org0-AdminPW --port 7054'
@@ -41,14 +42,11 @@ services:
       - FABRIC_CA_SERVER_CSR_HOSTS=0.0.0.0
       - FABRIC_CA_SERVER_DEBUG=false
       - FABRIC_CA_SERVER_DB_TYPE=mysql
-      - FABRIC_CA_SERVER_DB_DATASOURCE=fabric_ca_admin:fabric_ca2022@tcp(172.17.0.1:3306)/fabric_ca_org0?parseTime=true
+      - FABRIC_CA_SERVER_DB_DATASOURCE=fabric_ca_org_admin:fabric_ca_org2022@tcp(pascal.ieda.ust.hk:3306)/fabric_ca_org?parseTime=true
     volumes:
       - ~/01_Fabric/hyperledger/org0/ca:/tmp/hyperledger/fabric-ca
     networks:
       fabric-ca:
         ipv4_address: 172.18.0.12
     ports:
-      - 7052:7054
-
-
-
+      - 6051:7054

@@ -8,45 +8,47 @@ networks:
        - subnet: 172.18.0.0/16
 
 services:
-  tlsca-org2:
+  tlsca-org0:
     user: 1014:1014
-    container_name: tlsca-org2
+    container_name: tlsca-org0
     image: hyperledger/fabric-ca:1.5.2
-    command: /bin/sh -c 'fabric-ca-server start -d -b tlsca-org2-admin:tlsca-org2-AdminPW --port 7054'
+    command: /bin/sh -c 'fabric-ca-server start -d -b tlsca-org-admin:tlsca-org-AdminPW --port 7054'
     environment:
       - FABRIC_CA_SERVER_HOME=/tmp/hyperledger/fabric-ca/crypto
       - FABRIC_CA_SERVER_TLS_ENABLED=true
-      - FABRIC_CA_SERVER_CSR_CN=tlsca-org2
+      - FABRIC_CA_SERVER_CSR_CN=tlsca-org
       - FABRIC_CA_SERVER_CSR_HOSTS=0.0.0.0
       - FABRIC_CA_SERVER_DEBUG=false
       - FABRIC_CA_SERVER_DB_TYPE=mysql
       - FABRIC_CA_SERVER_DB_DATASOURCE=fabric_ca_org_admin:fabric_ca_org2022@tcp(pascal.ieda.ust.hk:3306)/fabric_tlsca_org?parseTime=true
     volumes:
-      - ~/01_Fabric/hyperledger/org2/tlsca:/tmp/hyperledger/fabric-ca
+      - ~/01_Fabric/hyperledger/org/tlsca:/tmp/hyperledger/fabric-ca
     networks:
       fabric-ca:
-        ipv4_address: 172.18.0.15
+        ipv4_address: 172.18.0.11
     ports:
-      - 8050:7054
-      
-  ca-org2:
+      - 7051:7054
+
+  ca-org0:
     user: 1014:1014
-    container_name: ca-org2
+    container_name: ca-org
     image: hyperledger/fabric-ca:1.5.2
-    command: /bin/sh -c 'fabric-ca-server start -d -b ca-org2-admin:ca-org2-AdminPW --port 7054'
+    command: /bin/sh -c 'fabric-ca-server start -d -b ca-org-admin:ca-org-AdminPW --port 7054'
     environment:
       - FABRIC_CA_SERVER_HOME=/tmp/hyperledger/fabric-ca/crypto
       - FABRIC_CA_SERVER_TLS_ENABLED=true
-      - FABRIC_CA_SERVER_CSR_CN=ca-org2
+      - FABRIC_CA_SERVER_CSR_CN=ca-org
       - FABRIC_CA_SERVER_CSR_HOSTS=0.0.0.0
       - FABRIC_CA_SERVER_DEBUG=false
       - FABRIC_CA_SERVER_DB_TYPE=mysql
       - FABRIC_CA_SERVER_DB_DATASOURCE=fabric_ca_org_admin:fabric_ca_org2022@tcp(pascal.ieda.ust.hk:3306)/fabric_ca_org?parseTime=true
     volumes:
-      - ~/01_Fabric/hyperledger/org2/ca:/tmp/hyperledger/fabric-ca
+      - ~/01_Fabric/hyperledger/org/ca:/tmp/hyperledger/fabric-ca
     networks:
       fabric-ca:
-        ipv4_address: 172.18.0.16
+        ipv4_address: 172.18.0.12
     ports:
-      - 8051:7054
+      - 7052:7054
+
+
 
